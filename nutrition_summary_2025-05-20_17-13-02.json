@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "food_name": "GRILLED CHICKEN",
+      "quantity": "7 oz",
+      "calories": 225.0,
+      "carbs": 24.3,
+      "protein": 10.21,
+      "fat": 9.51,
+      "fiber": 1.4,
+      "sugar": 1.06,
+      "sodium": 549.0,
+      "cholesterol": 25.0,
+      "calcium": 158.0,
+      "iron": 1.58,
+      "potassium": null,
+      "notes": "Half a grilled chicken"
+    },
+    {
+      "food_name": "MASHED POTATOES",
+      "quantity": "0.25 liter",
+      "calories": 429.0,
+      "carbs": 82.14,
+      "protein": 7.14,
+      "fat": 8.93,
+      "fiber": 7.1,
+      "sugar": 7.14,
+      "sodium": 2143.0,
+      "cholesterol": 0.0,
+      "calcium": 71.0,
+      "iron": 1.29,
+      "potassium": null,
+      "notes": "1/4 liter of mashed potatoes"
+    },
+    {
+      "food_name": "Macaroni or noodles with cheese, Easy Mac type",
+      "quantity": "0.25 liter",
+      "calories": 110.0,
+      "carbs": 20.1,
+      "protein": 3.26,
+      "fat": 1.86,
+      "fiber": 0.5,
+      "sugar": 2.33,
+      "sodium": 259.0,
+      "cholesterol": 2.0,
+      "calcium": 95.0,
+      "iron": 0.67,
+      "potassium": 99.0,
+      "notes": "1/4 liter of mac and cheese"
+    }
+  ]
+}
