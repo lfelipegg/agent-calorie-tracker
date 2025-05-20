@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "food_name": "Oatmeal",
+      "quantity": "1 bowl",
+      "calories": 150.0,
+      "carbs": 27.0,
+      "protein": 5.0,
+      "fat": 3.0,
+      "fiber": 4.0,
+      "sugar": 1.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0,
+      "calcium": 20.0,
+      "iron": 1.5,
+      "potassium": 150.0,
+      "notes": "Values are estimated for a typical bowl of cooked oatmeal."
+    },
+    {
+      "food_name": "Banana",
+      "quantity": "1 medium",
+      "calories": 105.0,
+      "carbs": 27.0,
+      "protein": 1.0,
+      "fat": 0.0,
+      "fiber": 3.0,
+      "sugar": 14.0,
+      "sodium": 1.0,
+      "cholesterol": 0.0,
+      "calcium": 5.0,
+      "iron": 0.3,
+      "potassium": 422.0,
+      "notes": "Values are typical for a medium-sized banana."
+    },
+    {
+      "food_name": "Coffee with Cream",
+      "quantity": "1 cup",
+      "calories": 50.0,
+      "carbs": 1.0,
+      "protein": 1.0,
+      "fat": 5.0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 10.0,
+      "cholesterol": 15.0,
+      "calcium": 20.0,
+      "iron": 0.0,
+      "potassium": 80.0,
+      "notes": "Values estimated for coffee with a small amount of cream."
+    }
+  ]
+}

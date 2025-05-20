@@ -3,9 +3,25 @@ import requests
 from agents import Agent, Runner, function_tool
 from pydantic import BaseModel, Field
 from typing import List, Optional
+import json
 
 # Environment variable for the USDA API Key
 USDA_API_KEY = os.getenv("USDA_API_KEY")
+
+# Nutrient ID map for USDA API
+NUTRIENT_IDS = {
+    "calories": 1008,
+    "protein": 1003,
+    "fat": 1004,
+    "carbs": 1005,
+    "fiber": 1079,
+    "sugar": 2000,
+    "sodium": 1093,
+    "cholesterol": 1253,
+    "calcium": 1087,
+    "iron": 1089,
+    "potassium": 1092
+}
 
 # Tool: Search food items using USDA API
 @function_tool
@@ -23,7 +39,24 @@ def get_nutrition_info(fdc_id: int) -> dict:
         f"https://api.nal.usda.gov/fdc/v1/food/{fdc_id}",
         params={"api_key": USDA_API_KEY}
     )
-    return response.json()
+    data = response.json()
+
+    nutrients = {n['nutrient']['id']: n['amount'] for n in data.get('foodNutrients', [])}
+
+    return {
+        "food_name": data.get("description"),
+        "calories": nutrients.get(NUTRIENT_IDS["calories"]),
+        "carbs": nutrients.get(NUTRIENT_IDS["carbs"]),
+        "protein": nutrients.get(NUTRIENT_IDS["protein"]),
+        "fat": nutrients.get(NUTRIENT_IDS["fat"]),
+        "fiber": nutrients.get(NUTRIENT_IDS["fiber"]),
+        "sugar": nutrients.get(NUTRIENT_IDS["sugar"]),
+        "sodium": nutrients.get(NUTRIENT_IDS["sodium"]),
+        "cholesterol": nutrients.get(NUTRIENT_IDS["cholesterol"]),
+        "calcium": nutrients.get(NUTRIENT_IDS["calcium"]),
+        "iron": nutrients.get(NUTRIENT_IDS["iron"]),
+        "potassium": nutrients.get(NUTRIENT_IDS["potassium"])
+    }
 
 # Structured output for the agent
 class NutritionItem(BaseModel):
@@ -68,5 +101,9 @@ if __name__ == "__main__":
         user_input = "I had a bowl of oatmeal with banana and a cup of coffee with cream."
         result = await Runner.run(nutrition_agent, user_input)
         print(result.final_output)
+
+        # Save to JSON file
+        with open("nutrition_summary.json", "w") as f:
+            f.write(result.final_output.model_dump_json(indent=2))
 
     asyncio.run(main())
