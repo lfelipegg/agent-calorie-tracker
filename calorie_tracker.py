@@ -4,9 +4,11 @@ from agents import Agent, Runner, function_tool
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import json
-
+from dotenv import load_dotenv
+load_dotenv()
 # Environment variable for the USDA API Key
 USDA_API_KEY = os.getenv("USDA_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Nutrient ID map for USDA API
 NUTRIENT_IDS = {
@@ -79,6 +81,7 @@ class NutritionSummary(BaseModel):
     items: List[NutritionItem]
 
 # Agent definition
+# Agent definition WITHOUT output_type
 nutrition_agent = Agent(
     name="NutritionAssistant",
     instructions=(
@@ -86,11 +89,14 @@ nutrition_agent = Agent(
         "1. Parse into food items with estimated quantities. "
         "2. Search USDA database using 'search_food'. "
         "3. Retrieve nutrition info using 'get_nutrition_info'. "
-        "4. Return a structured list of food items with name, quantity, calories, macronutrients, and optional micronutrients. "
-        "If uncertain, make a reasonable estimate and mention it in notes. Do NOT fabricate data."
+        "4. Return a JSON list of food items with fields: food_name, quantity, calories, carbs, protein, fat, and optional fiber, sugar, sodium, cholesterol, calcium, iron, potassium, and notes. "
+        "Example format: [{\"food_name\": \"Banana\", \"quantity\": \"1 medium\", \"calories\": 105, \"carbs\": 27, ...}]. "
+        "Do NOT include extra commentary, only the JSON list."
+        "Do NOT format the JSON output in Markdown or wrap it in triple backticks."
+
     ),
     tools=[search_food, get_nutrition_info],
-    output_type=NutritionSummary
+    model="gpt-4o-mini"  # You can use gpt-4-turbo or gpt-3.5 here too
 )
 
 # Example usage
@@ -100,10 +106,21 @@ if __name__ == "__main__":
     async def main():
         user_input = "I had a bowl of oatmeal with banana and a cup of coffee with cream."
         result = await Runner.run(nutrition_agent, user_input)
-        print(result.final_output)
+
+        try:
+            # Attempt to parse the LLM's plain JSON string output into structured Pydantic objects
+            parsed_data = json.loads(result.final_output)
+            structured = NutritionSummary(items=[NutritionItem(**item) for item in parsed_data])
+        except Exception as e:
+            print("Error parsing model output:", e)
+            print("Raw output:", result.final_output)
+            return
+
+        # Show parsed structure
+        print(structured)
 
         # Save to JSON file
         with open("nutrition_summary.json", "w") as f:
-            f.write(result.final_output.model_dump_json(indent=2))
+            f.write(structured.model_dump_json(indent=2))
 
     asyncio.run(main())
