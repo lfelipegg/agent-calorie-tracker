@@ -75,7 +75,7 @@ class NutritionItem(BaseModel):
     calcium: Optional[float] = Field(None, description="Milligrams of calcium")
     iron: Optional[float] = Field(None, description="Milligrams of iron")
     potassium: Optional[float] = Field(None, description="Milligrams of potassium")
-    notes: Optional[str] = Field(description="Any estimation notes")
+    notes: Optional[str] = Field(default=None, description="Any estimation notes")
 
 class NutritionSummary(BaseModel):
     items: List[NutritionItem]
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     import asyncio
 
     async def main():
-        user_input = "I had a bowl of oatmeal with banana and a cup of coffee with cream."
+        user_input = input("Type what you ate: ")
         result = await Runner.run(nutrition_agent, user_input)
 
         try:
